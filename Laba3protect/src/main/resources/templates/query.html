@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query</title>
+</head>
+<body>
+    <h1>SQL Query Executor</h1>
+    <form action="/query/execute" method="post">
+        <textarea name="sqlQuery" rows="5" cols="40" placeholder="Enter your SQL query here"></textarea><br><br>
+        <button type="submit">Execute Query</button>
+    </form>
+
+    <div>
+        <h2>Result:</h2>
+        <div>
+            <p th:if="${message}" th:text="${message}"></p>
+            <p th:if="${error}" th:text="${error}"></p>
+            <table th:if="${queryResult != null}">
+                <thead>
+                    <tr>
+                        <!-- Динамічне відображення заголовків стовпців -->
+                        <th th:each="colIndex : ${#numbers.sequence(0, queryResult[0].size() - 1)}"
+                            th:text="${'Column ' + (colIndex + 1)}"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="row : ${queryResult}">
+                        <!-- Виведення значень для кожного стовпця -->
+                        <td th:each="colIndex : ${#numbers.sequence(0, row.size() - 1)}" th:text="${row[colIndex]}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <a href="/" class="home-button">Home</a>
+</body>

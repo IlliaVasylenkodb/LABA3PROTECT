@@ -1,0 +1,253 @@
+/* Загальні стилі */
+@import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+@font-face {
+  font-family: "Raleway";
+  font-style: italic;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("https://fonts.gstatic.com/s/raleway/v34/1Ptsg8zYS_SKggPNyCg4QIFqPfE.woff2")
+    format("woff2");
+  unicode-range: U+0460-052F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F,
+    U+FE2E-FE2F;
+}
+
+body {
+  font-family: "Raleway", sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  background-color: #e8e5ee;
+  background-image: url("https://mir-oboev.ua/image/cache/catalog/oboi/3460-25-1000x1000.jpg");
+  background-size: cover; /* Щоб зображення заповнило весь екран */
+  background-position: center; /* Центрує зображення */
+  background-repeat: no-repeat; /* Забороняє повторення зображення */
+  margin: 0;
+  padding: 0;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7); /* Колір та прозорість пелени */
+  z-index: -1; /* Щоб пелена не перекривала контент */
+}
+
+/* Контейнер */
+.container {
+  max-width: 900px;
+  margin: 0 auto 0 auto;
+  padding: 30px 20px;
+  background-color: #f5f3fb;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Заголовки */
+h1,
+h2,
+h3 {
+  color: #1a1b1b;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Стилі форм */
+.form-container {
+  background-color: #f9f9f9;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.form-container label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 5px;
+  color: #171718;
+}
+
+.form-container input,
+.form-container select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #dfe1e5;
+  border-radius: 5px;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+}
+
+/* Стилі таблиць */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+table th,
+table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+td:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+table th {
+  background-color: #f1f1f1;
+  color: #1d1e1f;
+}
+
+table tr:nth-child(even) {
+  background-color: #f1f1f1;
+}
+
+table tr:nth-child(odd) {
+  background-color: #dedddd;
+}
+
+/* Стилі для кнопок */
+.button {
+  display: inline-block;
+  background-color: #51656c;
+  color: #fbfaff;
+  text-decoration: none;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* Окремі стилі для кнопок редагування та видалення */
+.button.edit {
+  width: 60px;
+  margin: 3px;
+}
+
+.button.back {
+  margin-top: 25px;
+}
+
+.button.delete {
+  width: 60px;
+  margin: 3px;
+  background-color: #c74442;
+}
+
+.button.delete:hover {
+  background-color: #e61515;
+}
+
+/* Стилі для таблиці та вирівнювання кнопок в рядок */
+table td {
+  text-align: center; /* Центрування кнопок всередині <td> */
+}
+
+/* Адаптивність для кнопок */
+@media (max-width: 600px) {
+  .button {
+    padding: 8px 20px;
+  }
+}
+/* Стилі навігації */
+.navigation {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.navigation a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.add-button {
+  float: left; 
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.back-button {
+  float: left; 
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.home-button {
+  float: right;
+  margin-top: 20px;
+  padding: 10px 15px;
+  background-color: #4CAF50;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.home-button:hover {
+  background-color: #45a049;
+}
+
+.avatar {
+  width: 200px;
+  height: 200px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  border-radius: 8px;
+}
+
+.avatar:hover {
+  transform: scale(1.1); /* Збільшує зображення на 10% при наведенні */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Тінь при наведенні */
+}
+
+.error {
+  color: red;
+}
+
+/* Адаптивність */
+@media (max-width: 600px) {
+  .container,
+  .form-container {
+    padding: 15px;
+  }
+
+  table th,
+  table td {
+    padding: 8px;
+  }
+
+  .button {
+    padding: 8px 20px;
+  }
+}

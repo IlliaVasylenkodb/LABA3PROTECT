@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Factories</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Factories</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Factory ID</th>
+                    <th>Factory Name</th>
+                    <th>Country ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="factory : ${factories}">
+                    <td th:text="${factory.factoryId}"></td>
+                    <td th:text="${factory.name}"></td>
+                    <td th:text="${factory.countryId}"></td>
+                    <td>
+                        <a th:href="@{/factories/edit/{id}(id=${factory.factoryId})}">Edit</a>
+                        <a th:href="@{/factories/delete/{id}(id=${factory.factoryId})}">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/factories/add" class="add-button">Add Factory</a>
+        <a href="/" class="home-button">Home</a> <!-- Added Home Button -->
+    </div>
+</body>
+</html>
