@@ -25,32 +25,35 @@ public class QueryController {
 
     // Обробка SQL запиту
     @PostMapping("/execute")
-    public String executeQuery(@RequestParam("sqlQuery") String sqlQuery, Model model) {
-        try {
-            // Перевіряємо тип команди
-            String commandType = sqlQuery.trim().split(" ")[0].toLowerCase();
-            
-            // Обробка команди insert
-            if (commandType.equals("insert")) {
+public String executeQuery(@RequestParam("sqlQuery") String sqlQuery, Model model) {
+    try {
+        // Перевіряємо тип команди
+        String commandType = sqlQuery.trim().split(" ")[0].toLowerCase();
+
+        switch (commandType) {
+            case "insert":
                 queryService.executeInsertCommand(sqlQuery);
                 model.addAttribute("message", "Insert command executed successfully!");
-            }
-            // Обробка команди delete
-            else if (commandType.equals("delete")) {
+                break;
+
+            case "delete":
                 queryService.executeDeleteCommand(sqlQuery);
                 model.addAttribute("message", "Delete command executed successfully!");
-            }
-            // Обробка команди read (select)
-            else if (commandType.equals("select")) {
-                var result = queryService.executeSelectCommand(sqlQuery);
-                model.addAttribute("queryResult", result);  // Передаём результаты на страницу
-            } else {
-                model.addAttribute("error", "Invalid command type.");
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "Error executing command: " + e.getMessage());
-        }
+                break;
 
-        return "query"; // Повертаємо на сторінку з результатами
+            case "select":
+                var result = queryService.executeSelectCommand(sqlQuery);
+                model.addAttribute("queryResult", result); // Передаємо результати на сторінку
+                break;
+
+            default:
+                model.addAttribute("error", "Invalid or unsafe command type.");
+        }
+    } catch (Exception e) {
+        model.addAttribute("error", "Error executing command: " + e.getMessage());
     }
+
+    return "query"; // Повертаємо на сторінку з результатами
+}
+
 }

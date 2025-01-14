@@ -1,6 +1,10 @@
 package com.tpp.lab3.service;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,66 +23,63 @@ public class QueryService {
         this.connection = dataSource.getConnection();
     }
 
-    // Метод для виконання SQL запиту (SELECT)
-    public List<List<String>> executeSelectCommand(String sqlQuery) throws SQLException {
-        // Перевірка на безпеку запиту
-        checkForUnsafeSelect(sqlQuery);
-
-        // Виконання запиту
+        // Метод для виконання DROP запиту
+    public void executeDropCommand(String sqlQuery) throws SQLException {
+        validateSqlQuery(sqlQuery, "drop");
         PreparedStatement stmt = connection.prepareStatement(sqlQuery);
-        ResultSet rs = stmt.executeQuery();
-        
-        // Список для збереження результатів
-        List<List<String>> result = new ArrayList<>();
-        
-        // Отримуємо метадані результату запиту
-        ResultSetMetaData metaData = rs.getMetaData();
-        int columnCount = metaData.getColumnCount();
-        
-        // Проходимо по всіх рядках і витягуємо значення
-        while (rs.next()) {
-            List<String> row = new ArrayList<>();
-            for (int i = 1; i <= columnCount; i++) {
-                row.add(rs.getString(i));  // Додаємо значення кожного стовпця
-            }
-            result.add(row); // Додаємо рядок в результат
-        }
+        stmt.executeUpdate();
+}
 
-        return result;
-    }
-
-    // Метод для виконання Insert запиту
+        // Метод для виконання Insert запиту
     public void executeInsertCommand(String sqlQuery) throws SQLException {
-        // Виконання запиту
+        validateSqlQuery(sqlQuery, "insert");
         PreparedStatement stmt = connection.prepareStatement(sqlQuery);
         stmt.executeUpdate();
     }
 
     // Метод для виконання Delete запиту
     public void executeDeleteCommand(String sqlQuery) throws SQLException {
-        // Виконання запиту
+        validateSqlQuery(sqlQuery, "delete");
         PreparedStatement stmt = connection.prepareStatement(sqlQuery);
         stmt.executeUpdate();
     }
 
-    // Перевірка на небезпечні SELECT запити
-    private void checkForUnsafeSelect(String sqlQuery) throws SQLException {
+    // Метод для виконання Select запиту
+    public List<List<String>> executeSelectCommand(String sqlQuery) throws SQLException {
+        validateSqlQuery(sqlQuery, "select");
+        PreparedStatement stmt = connection.prepareStatement(sqlQuery);
+        ResultSet rs = stmt.executeQuery();
+
+        List<List<String>> result = new ArrayList<>();
+        ResultSetMetaData metaData = rs.getMetaData();
+        int columnCount = metaData.getColumnCount();
+
+        while (rs.next()) {
+            List<String> row = new ArrayList<>();
+            for (int i = 1; i <= columnCount; i++) {
+                row.add(rs.getString(i));
+            }
+            result.add(row);
+        }
+
+        return result;
+    }
+
+    // Загальна перевірка SQL-запитів
+    private void validateSqlQuery(String sqlQuery, String expectedCommand) throws SQLException {
         String lowerQuery = sqlQuery.toLowerCase().trim();
 
-        // Дозволяємо запити типу SELECT * FROM <table>, без WHERE та інших небезпечних частин
-        if (lowerQuery.startsWith("select * from") && !lowerQuery.contains("where") && !lowerQuery.contains("or") && !lowerQuery.contains("1=1")) {
-            return;
+        // Перевіряємо, чи починається запит з очікуваного типу команди
+        if (!lowerQuery.startsWith(expectedCommand)) {
+            throw new SQLException("Invalid command: Expected a " + expectedCommand + " query.");
         }
 
-        // Блокуємо запити з WHERE, OR, 1=1, DROP, DELETE, TRUNCATE, UNION та інші
-        if (lowerQuery.matches("(?i).*select\\s+\\*\\s+from\\s+.+\\s+where.*") ||
-            lowerQuery.contains("or 1=1") ||
-            lowerQuery.contains("union") ||
-            lowerQuery.contains("drop") ||
-            lowerQuery.contains("delete") ||
-            lowerQuery.contains("truncate") ||
-            lowerQuery.matches("(?i).*select\\s+.*from.*--.*")) {
-            throw new SQLException("Unsafe SELECT query detected. This query is not allowed.");
+        // Забороняємо DROP, TRUNCATE, ALTER, UPDATE, UNION та інші небезпечні запити
+        if (lowerQuery.contains("drop") || lowerQuery.contains("truncate") || lowerQuery.contains("alter") ||
+            lowerQuery.contains("update") || lowerQuery.contains("union") || lowerQuery.contains("--") ||
+            lowerQuery.contains(";") || lowerQuery.matches(".*1\\s*=\\s*1.*")) {
+            throw new SQLException("Unsafe SQL query detected. This query is not allowed.");
         }
     }
+
 }
