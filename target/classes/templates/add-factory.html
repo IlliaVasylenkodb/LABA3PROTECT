@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Factory</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Add Factory</h1>
+
+        <!-- Форма для добавления фабрики -->
+        <form th:action="@{/factories/add}" th:object="${factory}" method="post" class="factory-form">
+            
+            <!-- Поле для имени фабрики -->
+            <label for="name">Factory Name:</label>
+            <input type="text" id="name" th:field="*{name}" required class="input-field">
+
+            <!-- Выпадающий список для выбора страны -->
+            <label for="countryId">Country:</label>
+            <select id="countryId" th:field="*{countryId}" required class="input-field">
+                <option value="" disabled selected>Select a country</option>
+                <th:block th:each="country : ${countries}">
+                    <option th:value="${country.countryId}" th:text="${country.name}"></option>
+                </th:block>
+            </select>
+
+            <button type="submit" class="submit-button">Add Factory</button>
+        </form>
+
+        <!-- Ссылка для возврата на страницу со списком фабрик -->
+        <div class="back-link">
+            <a href="/factories" class="back-button">Back to Factories</a>
+        </div>
+        
+        <!-- Кнопка для перехода на главную страницу -->
+        <div class="home-link">
+            <a href="/" class="home-button">Home</a>
+        </div>
+    </div>
+</body>
+</html>
